@@ -1,6 +1,11 @@
 import { SetStateAction, useState } from 'react';
 import './App.css';
 
+/**
+ * タイックタックトーボード内のマスを表します
+ * @param value - マスの値（'X'、'O'、またはnull）
+ * @param onSquareClick - マスがクリックされたときに呼び出される関数。
+ */
 
 function Square({ value, onSquareClick }: { value: string, onSquareClick: () => void }) {
   return (
@@ -13,13 +18,22 @@ function Square({ value, onSquareClick }: { value: string, onSquareClick: () => 
   );
 }
 
+/**
+ * タイックタックトーボードを表します。
+ */
 function Board() {
   const [squares, setSquares] = useState<string[]>(Array(9).fill(null));
+
+  /**
+   * マスがクリックされたときのイベントを処理します。
+   * @param i - クリックされたマスのインデックス
+   */
   function handleClick(i: number) {
     const newSquares = squares.slice();
     newSquares[i] = 'X';
     setSquares(newSquares);
   }
+
   return (
     <>
       <div className='board-row'>
@@ -37,9 +51,13 @@ function Board() {
         <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
         <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
       </div>
-    </>);
+    </>
+  );
 }
 
+/**
+ * Represents the main application component.
+ */
 function App() {
   return (
     <div className="App">
