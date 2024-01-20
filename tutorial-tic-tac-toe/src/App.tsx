@@ -1,5 +1,6 @@
 import { SetStateAction, useState } from 'react';
 import './App.css';
+import internal from 'stream';
 
 /**
  * タイックタックトーボード内のマスを表します
@@ -21,7 +22,7 @@ function Square({ value, onSquareClick }: { value: string, onSquareClick: () => 
 /**
  * タイックタックトーボードを表します。
  */
-function Board() {
+function Board({numRows, numCols}: { numRows: number, numCols: number}) {
   const [squares, setSquares] = useState<string[]>(Array(9).fill(null));
 
   /**
@@ -31,27 +32,25 @@ function Board() {
   function handleClick(i: number) {
     const newSquares = squares.slice();
     newSquares[i] = 'X';
+    console.debug(i)
     setSquares(newSquares);
   }
-
+  
   return (
-    <>
-      <div className='board-row'>
-        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
-      </div>
-      <div className='board-row'>
-        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
-      </div>
-      <div className='board-row'>
-        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
-      </div>
-    </>
+    <div className='board'>
+      {Array.from({ length: numRows }, (_, row) => (
+        <div key={row} className='board-row'>
+          {Array.from({ length: numCols }, (_, col) => {
+            const key = row * numCols + col;
+            return <Square
+              key={key}
+              value={squares[key]}
+              onSquareClick={() => handleClick(key)}
+            />
+          })}
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -62,7 +61,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Board />
+        <Board numCols={5} numRows={3}  />
       </header>
     </div>
   );
