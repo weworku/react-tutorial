@@ -12,7 +12,7 @@ interface SquareProps{
   onSquareClick: () => void;
   disabled: boolean;
 }
-function Square({ value, onSquareClick, disabled }: SquareProps) {
+const Square = ({ value, onSquareClick, disabled }: SquareProps) => {
   return (
     <button
       className="square"
@@ -31,7 +31,7 @@ interface BoardProps{
 /**
  * タイックタックトーボードを表します。
  */
-export function Board({numRows, numCols}: BoardProps) {
+export const Board = ({numRows, numCols}: BoardProps) => {
   const [squares, setSquares] = useState<string[]>(Array(9).fill(null));
 
   /**
@@ -67,14 +67,13 @@ export function Board({numRows, numCols}: BoardProps) {
 /**
  * Represents the main application component.
  */
-function App() {
+export const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <Board numCols={5} numRows={3}  />
+        <Board numCols={2} numRows={3}  />
       </header>
     </div>
   );
 }
 
-export default App;
