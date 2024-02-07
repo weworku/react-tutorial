@@ -32,7 +32,8 @@ interface BoardProps{
  * タイックタックトーボードを表します。
  */
 export const Board = ({numRows, numCols}: BoardProps) => {
-  const [squares, setSquares] = useState<string[]>(Array(9).fill(null));
+  const [xIsNext, setXIsNext] = useState<boolean>(true);
+  const [squares, setSquares] = useState<string[]>(Array());
 
   /**
    * マスがクリックされたときのイベントを処理します。
@@ -40,9 +41,14 @@ export const Board = ({numRows, numCols}: BoardProps) => {
    */
   function handleClick(i: number) {
     const newSquares = squares.slice();
-    newSquares[i] = 'X';
-    console.debug(i)
+    if(newSquares[i]){
+      return;
+    }
+    let v = xIsNext ? 'X' : 'O';
+    newSquares[i] = v;
+    console.debug(`i=${i}, before=${squares} after=${newSquares}`)
     setSquares(newSquares);
+    setXIsNext(!xIsNext);
   }
   
   return (
@@ -71,7 +77,7 @@ export const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <Board numCols={2} numRows={3}  />
+        <Board numCols={5} numRows={3}  />
       </header>
     </div>
   );
