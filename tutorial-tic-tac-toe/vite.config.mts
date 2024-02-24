@@ -12,14 +12,6 @@ export default defineConfig({
     root: "./",
     build: {
         outDir: "dist",
-        // 以下、SSRの設定 必要に応じてコメントアウトを外す
-        // ssrManifest: true,
-        // ssr: true,
-        // rollupOptions: {
-        //     input: {
-        //         main: "./index.html",
-        //     },
-        // },
     },
     base: "/",
     publicDir: "./public",
