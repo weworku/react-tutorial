@@ -7,12 +7,12 @@ import internal from 'stream';
  * @param value - マスの値（'X'、'O'、またはnull）
  * @param onSquareClick - マスがクリックされたときに呼び出される関数。
  */
-interface SquareProps{
+interface ISquareProps{
   value: string;
   onSquareClick: () => void;
   disabled: boolean;
 }
-const Square = ({ value, onSquareClick, disabled }: SquareProps) => {
+const Square = ({ value, onSquareClick, disabled }: ISquareProps) => {
   return (
     <button
       className="square"
@@ -24,14 +24,14 @@ const Square = ({ value, onSquareClick, disabled }: SquareProps) => {
   );
 }
 
-interface BoardProps{
+interface IBoardProps{
   numRows: number;
   numCols: number;
 }
 /**
  * タイックタックトーボードを表します。
  */
-export const Board = ({numRows, numCols}: BoardProps) => {
+export const Board = ({numRows, numCols}: IBoardProps) => {
   const [xIsNext, setXIsNext] = useState<boolean>(true);
   const [squares, setSquares] = useState<string[]>(Array());
 
