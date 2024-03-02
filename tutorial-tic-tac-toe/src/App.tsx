@@ -7,12 +7,12 @@ import internal from 'stream';
  * @param value - マスの値（'X'、'O'、またはnull）
  * @param onSquareClick - マスがクリックされたときに呼び出される関数。
  */
-interface ISquareProps{
+type SquareProps = {
   value: string;
   onSquareClick: () => void;
   disabled: boolean;
 }
-const Square = ({ value, onSquareClick, disabled }: ISquareProps) => {
+const Square = ({ value, onSquareClick, disabled }: SquareProps) => {
   return (
     <button
       className="square"
@@ -24,14 +24,15 @@ const Square = ({ value, onSquareClick, disabled }: ISquareProps) => {
   );
 }
 
-interface IBoardProps{
+type BoardProps = {
   numRows: number;
   numCols: number;
 }
+
 /**
  * タイックタックトーボードを表します。
  */
-export const Board = ({numRows, numCols}: IBoardProps) => {
+export const Board = ({ numRows, numCols }: BoardProps) => {
   const [xIsNext, setXIsNext] = useState<boolean>(true);
   const [squares, setSquares] = useState<string[]>(Array());
 
@@ -41,7 +42,7 @@ export const Board = ({numRows, numCols}: IBoardProps) => {
    */
   function handleClick(i: number) {
     const newSquares = squares.slice();
-    if(newSquares[i]){
+    if (newSquares[i]) {
       return;
     }
     let v = xIsNext ? 'X' : 'O';
@@ -50,7 +51,7 @@ export const Board = ({numRows, numCols}: IBoardProps) => {
     setSquares(newSquares);
     setXIsNext(!xIsNext);
   }
-  
+
   return (
     <div className='board'>
       {Array.from({ length: numRows }, (_, row) => (
@@ -77,7 +78,7 @@ export const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <Board numCols={5} numRows={3}  />
+        <Board numCols={5} numRows={3} />
       </header>
     </div>
   );
