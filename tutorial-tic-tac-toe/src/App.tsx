@@ -27,15 +27,15 @@ const Square = ({ value, onSquareClick, disabled }: SquareProps) => {
 type BoardProps = {
   numRows: number;
   numCols: number;
+  xIsNext: boolean;
+  squares: Squares;
+  onPlay: (squares: string[]) => void;
 }
 
 /**
  * タイックタックトーボードを表します。
  */
-export const Board = ({ numRows, numCols }: BoardProps) => {
-  const [xIsNext, setXIsNext] = useState<boolean>(true);
-  const [squares, setSquares] = useState<string[]>(Array());
-
+export const Board = ({ numRows, numCols, xIsNext, squares, onPlay }: BoardProps) => {
   /**
    * マスがクリックされたときのイベントを処理します。
    * @param i - クリックされたマスのインデックス
@@ -48,8 +48,7 @@ export const Board = ({ numRows, numCols }: BoardProps) => {
     let v = xIsNext ? 'X' : 'O';
     newSquares[i] = v;
     console.debug(`i=${i}, before=${squares} after=${newSquares}`)
-    setSquares(newSquares);
-    setXIsNext(!xIsNext);
+    onPlay(newSquares);
   }
 
   return (
@@ -71,16 +70,34 @@ export const Board = ({ numRows, numCols }: BoardProps) => {
   );
 }
 
+
+type Squares = string[];
+
 /**
  * Represents the main application component.
  */
-export const App = () => {
+const App = () => {
+  const [x, y] = [5, 3];
+  const [xIsNext, setXIsNext] = useState<boolean>(true);
+  const [history, setHistory] = useState<Squares[]>([Array(x * y).fill(null)]); // 盤面の配列を持ち、履歴にする
+  const currentSquares: Squares = history[history.length - 1];
+
+  function handlePlay(nextSquares: Squares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <Board numCols={5} numRows={3} />
-      </header>
+    <div className="game">
+      <div className="game-board">
+        {/* <Board numCols={x} numRows={y} /> */}
+        <Board numCols={x} numRows={y} xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
     </div>
   );
 }
 
+export default App;
