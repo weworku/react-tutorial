@@ -87,7 +87,7 @@ const App = () => {
     setXIsNext(!xIsNext);
   }
 
-  function handleMoveClick(move: number) {
+  function jumpTo(move: number) {
     // Logic for handling move click
   }
 
@@ -101,7 +101,7 @@ const App = () => {
         <ol>
           {history.map((_, move) => (
             <li key={move}>
-              <button onClick={() => handleMoveClick(move)}>Go to move #{move}</button>
+              <button onClick={() => jumpTo(move)}>Go to move #{move}</button>
             </li>
           ))}
         </ol>
