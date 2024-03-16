@@ -87,6 +87,10 @@ const App = () => {
     setXIsNext(!xIsNext);
   }
 
+  function handleMoveClick(move: number) {
+    // Logic for handling move click
+  }
+
   return (
     <div className="game">
       <div className="game-board">
@@ -94,7 +98,13 @@ const App = () => {
         <Board numCols={x} numRows={y} xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <ol>{/*TODO*/}</ol>
+        <ol>
+          {history.map((_, move) => (
+            <li key={move}>
+              <button onClick={() => handleMoveClick(move)}>Go to move #{move}</button>
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   );
