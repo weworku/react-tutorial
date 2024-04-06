@@ -78,21 +78,19 @@ type Squares = string[];
  */
 const App = () => {
   const [x, y] = [5, 3];
-  const [xIsNext, setXIsNext] = useState<boolean>(true);
   const [history, setHistory] = useState<Squares[]>([Array(x * y).fill(null)]); // 盤面の配列を持ち、履歴にする
   const [currentMove, setCurrentMove] = useState(0); // 現在ユーザが見ているのが何番目の着手であるのか
+  const xIsNext = currentMove % 2 === 0;
   const currentSquares: Squares = history[currentMove];
 
   function handlePlay(nextSquares: Squares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
-    setXIsNext(!xIsNext);
   }
 
   function jumpTo(nextMove: number) {
     setCurrentMove(nextMove);
-    setXIsNext(nextMove % 2 === 0);
   }
     
 
