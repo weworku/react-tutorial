@@ -7,35 +7,50 @@ import internal from 'stream';
  * @param value - マスの値（'X'、'O'、またはnull）
  * @param onSquareClick - マスがクリックされたときに呼び出される関数。
  */
-
-function Square({ value, onSquareClick }: { value: string, onSquareClick: () => void }) {
+type SquareProps = {
+  value: string;
+  onSquareClick: () => void;
+  disabled: boolean;
+}
+const Square = ({ value, onSquareClick, disabled }: SquareProps) => {
   return (
     <button
       className="square"
       onClick={onSquareClick}
+      disabled={disabled}
     >
       {value}
     </button>
   );
 }
 
+type BoardProps = {
+  numRows: number;
+  numCols: number;
+  xIsNext: boolean;
+  squares: Squares;
+  onPlay: (squares: string[]) => void;
+}
+
 /**
  * タイックタックトーボードを表します。
  */
-function Board({numRows, numCols}: { numRows: number, numCols: number}) {
-  const [squares, setSquares] = useState<string[]>(Array(9).fill(null));
-
+export const Board = ({ numRows, numCols, xIsNext, squares, onPlay }: BoardProps) => {
   /**
    * マスがクリックされたときのイベントを処理します。
    * @param i - クリックされたマスのインデックス
    */
   function handleClick(i: number) {
     const newSquares = squares.slice();
-    newSquares[i] = 'X';
-    console.debug(i)
-    setSquares(newSquares);
+    if (newSquares[i]) {
+      return;
+    }
+    let v = xIsNext ? 'X' : 'O';
+    newSquares[i] = v;
+    console.debug(`i=${i}, before=${squares} after=${newSquares}`)
+    onPlay(newSquares);
   }
-  
+
   return (
     <div className='board'>
       {Array.from({ length: numRows }, (_, row) => (
@@ -46,6 +61,7 @@ function Board({numRows, numCols}: { numRows: number, numCols: number}) {
               key={key}
               value={squares[key]}
               onSquareClick={() => handleClick(key)}
+              disabled={false}
             />
           })}
         </div>
@@ -54,15 +70,45 @@ function Board({numRows, numCols}: { numRows: number, numCols: number}) {
   );
 }
 
+
+type Squares = string[];
+
 /**
  * Represents the main application component.
  */
-function App() {
+const App = () => {
+  const [x, y] = [5, 3];
+  const [history, setHistory] = useState<Squares[]>([Array(x * y).fill(null)]); // 盤面の配列を持ち、履歴にする
+  const [currentMove, setCurrentMove] = useState(0); // 現在ユーザが見ているのが何番目の着手であるのか
+  const xIsNext = currentMove % 2 === 0;
+  const currentSquares: Squares = history[currentMove];
+
+  function handlePlay(nextSquares: Squares) {
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
+  }
+
+  function jumpTo(nextMove: number) {
+    setCurrentMove(nextMove);
+  }
+    
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <Board numCols={5} numRows={3}  />
-      </header>
+    <div className="game">
+      <div className="game-board">
+        {/* <Board numCols={x} numRows={y} /> */}
+        <Board numCols={x} numRows={y} xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>
+          {history.map((_, move) => (
+            <li key={move}>
+              <button onClick={() => jumpTo(move)}>Go to move #{move}</button>
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
   );
 }
