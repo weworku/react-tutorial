@@ -7,7 +7,7 @@ test.each([
   [4, 4],
   [2, 5],
 ])('renders board with %i rows and %i columns', (numRows, numCols) => {
-  render(<Board numRows={numRows} numCols={numCols} />);
+  render(<Board numRows={numRows} numCols={numCols} xIsNext={true} squares={Array(9).fill(null)} onPlay={() => { }} />);
   const squares = screen.getAllByRole('button').filter((button) => button.classList.contains('square'));
   expect(squares).toHaveLength(numRows * numCols);
 });
